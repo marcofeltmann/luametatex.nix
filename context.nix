@@ -25,10 +25,23 @@ with import <nixpkgs> {}; stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    cp luametatex "$out/bin/"
-    cp -r scripts "$out/scripts"
-    ln -s "$out/bin/luametatex --lua=$out/scripts/context/lua/mtxrun.lua" "$out/bin/mtxrun"
-    ln -s "$out/bin/luametatex --lua=$out/scripts/context/lua/context.lua" "$out/bin/context"
+    echo "prepare tooling file structure"
+    mkdir -p "$out/tex/texmf-context" "$out/tex/texmf-linux-64/bin"
+    cp -r colors "$out/tex/texmf-context/"
+    cp -r context "$out/tex/texmf-context/"
+    cp -r doc "$out/tex/texmf-context/"
+    cp -r fonts "$out/tex/texmf-context/"
+    cp -r metapost "$out/tex/texmf-context/"
+    cp -r scripts "$out/tex/texmf-context/"
+    cp -r tex "$out/tex/texmf-context/"
+    cp -r web2c "$out/tex/texmf-context/"
+    mv "$out/tex/texmf-context/web2c/contextcnf.lua" "$out/tex/texmf-context/web2c/texmfcnf.lua"
+
+    echo "prepare binaries"
+    cp luametatex "$out/tex/texmf-linux-64/bin/"
+    ln -s "$out/tex/texmf-linux-64/bin/luametatex" "$out/tex/texmf-linux-64/bin/mtxrun"
+    cp scripts/context/lua/mtxrun.lua "$out/tex/texmf-linux-64/bin/mtxrun.lua"
+    ln -s "$out/tex/texmf-linux-64/bin/luametatex" "$out/tex/texmf-linux-64/bin/context"
+    cp scripts/context/lua/context.lua "$out/tex/texmf-linux-64/bin/context.lua"
   '';
 }
